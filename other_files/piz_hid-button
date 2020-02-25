@@ -1,0 +1,30 @@
+#!/usr/bin/env python3
+
+import RPi.GPIO as GPIO
+from subprocess import call
+from time import sleep
+
+# constants
+input_pin = 21
+bounce_time = 300
+sleep_t = 3600
+out_txt = "<sample_text>"
+
+
+# write pass in pass
+def my_callback(channel):
+    call(["piz_hid-keyboard", "1", out_txt])
+
+
+# Don't use physical pin numbering
+GPIO.setmode(GPIO.BCM)
+# Set pin as input, initially on
+GPIO.setup(input_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.add_event_detect(
+    input_pin, GPIO.RISING, callback=my_callback, bouncetime=bounce_time
+)
+
+while True:
+    sleep(sleep_t)
+
+GPIO.cleanup()  # Clean up

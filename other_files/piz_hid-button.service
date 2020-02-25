@@ -1,0 +1,10 @@
+[Unit]
+Description=PIZ_HID button service
+DefaultDependencies=true
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/piz_hid/piz_hid-button
+
+[Install]
+WantedBy=local-fs.target

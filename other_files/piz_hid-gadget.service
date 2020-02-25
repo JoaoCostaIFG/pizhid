@@ -1,0 +1,13 @@
+# put in /lib/systemd/system/
+# delete this 3 lines
+# enable service after "sudo systemctl daemon-reload"
+[Unit]
+Description=PIZ_HID usb gadget service
+DefaultDependencies=true
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/piz_hid/piz_hid-usbgadget
+
+[Install]
+WantedBy=local-fs.target

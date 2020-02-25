@@ -1,0 +1,22 @@
+#!/bin/sh
+
+input_pass="$(htmlpost2str "$(cat <&0)")"
+login_file="/piz_hid-login/pass"
+
+if [ "$input_pass" ]; then
+	salt="$(head -2 /etc/piz_hid-creds | tail -1)"
+	hash="$(head -1 /etc/piz_hid-creds)"
+	iter="$(tail -1 /etc/piz_hid-creds)"
+
+	if [ "$(piz_hid-hash "$input_pass" "$salt" "$iter")" = "$hash" ]; then
+		(umask 077; printf "%s" "$input_pass" >"$login_file")
+	fi
+fi
+
+if [ -f "$login_file" ]; then
+	printf 'Content-type: text/html\n\nauthenticated'
+
+else
+	printf 'Content-type: text/html\n\n'
+
+fi

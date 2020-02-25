@@ -1,0 +1,6 @@
+#!/bin/sh
+
+
+printf 'Content-type: text/html\n\n'
+
+sudo shutdown now

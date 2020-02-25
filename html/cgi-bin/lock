@@ -1,0 +1,7 @@
+#!/bin/sh
+
+
+login_file="/piz_hid-login/pass"
+rm "$login_file"
+
+printf 'Content-type: text/html\n\n'

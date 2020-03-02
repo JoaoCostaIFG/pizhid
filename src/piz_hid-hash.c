@@ -1,10 +1,11 @@
-/* takes a password, a salt string and an optional number of iterations
+/* Takes a password, a salt string and an optional number of iterations
  * (1000000 by default) and returns an hash of the password using
- * PKCS5_PBKDF2_HMAC SHA3-512
+ * PKCS5_PBKDF2_HMAC with SHA3-512.
+ * The given salt must be at least 64 byte long (only the first 64 bytes are
+ * used). Smaller salt lengths will yield inconsistent results.
  */
 
 /* compile with gcc piz_hid-hash.c -lssl -lcrypto */
-
 
 #include <openssl/evp.h>
 #include <stdio.h>
@@ -12,64 +13,68 @@
 #include <string.h>
 
 #define _XOPEN_SOURCE 700
-#define KEY_LEN	64
-#define SALT_LEN 64
+#define HASH_LEN      64
+#define SALT_LEN      64
+#define DFLT_ITER     1000000
+#define PASS_IND      1
+#define SALT_IND      2
+#define ITER_IND      3
 
-
-int main(int argc, char *argv[])
+int
+main(int argc, char* argv[])
 {
-	if (argc < 3) {
-		fprintf(stderr, "usage: piz_hid-crypt [-v] <password> <salt> [iterations]");
-		exit(1);
-	}
-	OPENSSL_malloc_init();
-	unsigned char *out, *salt;
-	out = (unsigned char *) OPENSSL_secure_malloc(sizeof(unsigned char) * KEY_LEN);
-	salt = (unsigned char *) OPENSSL_secure_malloc(sizeof(unsigned char) * SALT_LEN);
-	unsigned int iter = 1000000;
-	unsigned short int basei = 1;
+  if (argc < 3) {
+    fputs("usage: piz_hid-crypt <password> <salt> [iterations]\n", stderr);
+    exit(1);
+  }
 
-	if (strcmp(argv[1], "-v") == 0) {
-		/* verbose mode printf pass salt and iteration */
-		basei = 2;
+  /* memory allocation */
+  OPENSSL_malloc_init();
+  unsigned char* out =
+    (unsigned char*)OPENSSL_secure_malloc(sizeof(unsigned char) * HASH_LEN);
+  if (!out) {
+    fputs("Memory allocation for hash failed. Exiting..", stderr);
+    exit(1);
+  }
+  unsigned char* salt =
+    (unsigned char*)OPENSSL_secure_malloc(sizeof(unsigned char) * SALT_LEN);
+  if (!salt) {
+    fputs("Memory allocation for salt failed. Exiting..", stderr);
+    exit(1);
+  }
 
-		printf("pass: %s\n", argv[basei]);
+  /* store salt */
+  for (size_t i = 0; i < SALT_LEN; i++)
+    salt[i] = argv[SALT_IND][i];
 
-		printf("salt: ");
-		for (size_t i = 0; i < SALT_LEN; i++) {
-			salt[i] = argv[3][i];
-			printf("%02x", salt[i]);
-		}
-		printf("\n");
+  /* set iteration number */
+  int iter;
+  if (argc > ITER_IND)
+    iter = atoi(argv[ITER_IND]);
+  else
+    iter = DFLT_ITER;
+  printf("%d\n", iter);
 
-		if (argc == 5)
-			iter = atoi(argv[4]);
-		printf("iter: %d\n", iter);
+  /* algorythm is defined by EVP_sha3_512 */
+  if (PKCS5_PBKDF2_HMAC(argv[PASS_IND],
+                        strlen(argv[PASS_IND]),
+                        salt,
+                        SALT_LEN,
+                        iter,
+                        EVP_sha3_512(),
+                        HASH_LEN,
+                        out) != 0) {
+    for (size_t i = 0; i < HASH_LEN; i++)
+      printf("%02x", out[i]);
+    puts("");
+  }
+  else {
+    fputs("Hash calculation failed\n", stderr);
+    exit(1);
+  }
 
-	}
-	else {
-		for (size_t i = 0; i < SALT_LEN; i++)
-			salt[i] = argv[2][i];
-
-		if (argc == 4)
-			iter = atof(argv[3]);
-
-	}
-
-	/* algorythm is defined by EVP_sha3_512 */
-	if (PKCS5_PBKDF2_HMAC(argv[basei], strlen(argv[basei]), salt, SALT_LEN, iter, EVP_sha3_512(), KEY_LEN, out) != 0) {
-		for (size_t i = 0; i < KEY_LEN; i++){
-			printf("%02x", out[i]);
-		}
-		puts("");
-	}
-	else {
-		fprintf(stderr, "PKCS5_PBKDF2_HMAC failed\n");
-		exit(1);
-	}
-
-	OPENSSL_secure_free(salt);
-	OPENSSL_secure_free(out);
-
-	return 0;
+  /* free memory */
+  OPENSSL_secure_free(salt);
+  OPENSSL_secure_free(out);
+  return 0;
 }

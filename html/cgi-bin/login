@@ -11,8 +11,8 @@ fi
 
 login_file="/piz_hid-login/pass"
 if [ "$input_pass" ]; then
-  salt="$(head -2 /etc/piz_hid-creds | tail -1)"
   hash="$(head -1 /etc/piz_hid-creds)"
+  salt="$(head -2 /etc/piz_hid-creds | tail -1)"
   iter="$(tail -1 /etc/piz_hid-creds)"
   if [ "$(piz_hid-hash "$input_pass" "$salt" "$iter")" = "$hash" ]; then
     (

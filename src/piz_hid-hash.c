@@ -30,16 +30,20 @@ main(int argc, char* argv[])
 
   /* memory allocation */
   OPENSSL_malloc_init();
-  unsigned char* out =
-    (unsigned char*)OPENSSL_secure_malloc(sizeof(unsigned char) * HASH_LEN);
-  if (!out) {
-    fputs("Memory allocation for hash failed. Exiting..", stderr);
+  if (strlen(argv[SALT_IND]) < 64) {
+    fputs("Salt too short\n", stderr);
     exit(1);
   }
   unsigned char* salt =
     (unsigned char*)OPENSSL_secure_malloc(sizeof(unsigned char) * SALT_LEN);
   if (!salt) {
     fputs("Memory allocation for salt failed. Exiting..", stderr);
+    exit(1);
+  }
+  unsigned char* out =
+    (unsigned char*)OPENSSL_secure_malloc(sizeof(unsigned char) * HASH_LEN);
+  if (!out) {
+    fputs("Memory allocation for hash failed. Exiting..", stderr);
     exit(1);
   }
 
@@ -53,7 +57,6 @@ main(int argc, char* argv[])
     iter = atoi(argv[ITER_IND]);
   else
     iter = DFLT_ITER;
-  printf("%d\n", iter);
 
   /* algorythm is defined by EVP_sha3_512 */
   if (PKCS5_PBKDF2_HMAC(argv[PASS_IND],
@@ -66,7 +69,7 @@ main(int argc, char* argv[])
                         out) != 0) {
     for (size_t i = 0; i < HASH_LEN; i++)
       printf("%02x", out[i]);
-    puts("");
+    /* puts(""); */
   }
   else {
     fputs("Hash calculation failed\n", stderr);

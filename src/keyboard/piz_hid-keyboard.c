@@ -1,8 +1,8 @@
 /*
  * This program convers strings/chars given in argv to the code used by
  * keyboards on keypress Can be used, for example, on a raspberry pi that is
- * acting as an HID gadget (FSconfig) to act as a keyboard on a connected device
- * (with USB OTG)
+ * acting as an HID gadget (FSconfig) to act as a keyboard on a connected
+ * device (with USB OTG)
  */
 
 #include <stdio.h>
@@ -13,68 +13,66 @@
 #include "keys.h"
 
 #define _XOPEN_SOURCE 700
+#define MILISEC       1000
+#define NANOSEC       1000000
 
-void sleep_ms(int milliseconds) {
+#define INSERT_KEY(dev, mod, chr) \
+  fprintf(dev, "%c%c%c%c%c%c%c%c", mod, '\0', chr, '\0', '\0', '\0', '\0', '\0')
+
+void
+sleep_ms(int milliseconds)
+{
   /* pause execution for milliseconds ms */
   struct timespec ts;
-
-  ts.tv_sec = milliseconds / 1000;
-  ts.tv_nsec = (milliseconds % 1000) * 1000000;
+  ts.tv_sec  = milliseconds / MILISEC;
+  ts.tv_nsec = (milliseconds % MILISEC) * NANOSEC;
   nanosleep(&ts, NULL);
 }
 
-void release_keys(FILE *fp) {
-  fprintf(fp,"%c%c%c%c%c%c%c%c", '\0', '\0', '\0', '\0', '\0', '\0', '\0',
-          '\0');
+void
+release_keys(FILE* fp)
+{
+  INSERT_KEY(fp, '\0', '\0');
 }
 
-void write_key(char modifier, char keytowrite, FILE *fp) {
+void
+write_key(struct Key* key, FILE* fp)
+{
   /* press key */
-  fprintf(fp, "%c%c%c%c%c%c%c%c", modifier, '\0', keytowrite, '\0', '\0', '\0',
-          '\0', '\0');
-
+  INSERT_KEY(fp, key->modifier, key->chr);
+  /* dead keys need to be pressed twice */
+  if (key->is_dead)
+    INSERT_KEY(fp, key->modifier, key->chr);
   /* release key */
-  /* release_keys(fp); */
+  release_keys(fp);
 }
 
-int main(int argc, char *argv[]) {
+int
+main(int argc, char* argv[])
+{
+  // print usage
   if (argc < 3) {
     fputs("Usage: piz_hid-keyboard <layout> <text>\n", stderr);
     exit(1);
   }
+  int lay = atoi(argv[1]); // get layout number
 
   // open device
-  FILE *fp;
+  FILE* fp;
   if ((fp = fopen("/dev/hidg0", "w")) == NULL) {
     fputs("Couldn't open /dev/hidg0 device\n", stderr);
     exit(1);
   }
 
-  char last_char;
-  short unsigned int lay = atoi(argv[1]);
-
   for (int i = 2; i < argc; ++i) {
-    last_char = argv[i][0];
     for (int j = 0; j < strlen(argv[i]); ++j) {
-      /* check if key releasing is needed */
-      if (argv[i][j] == last_char)
-        release_keys(fp);
-      else
-        last_char = argv[i][j];
-
-      write_key(layout[argv[i][j]].keys[lay].modifier,
-                layout[argv[i][j]].keys[lay].keytowrite, fp);
-      if (layout[argv[i][j]].keys[lay].is_dead)
-        write_key(layout[argv[i][j]].keys[lay].modifier,
-                  layout[argv[i][j]].keys[lay].keytowrite, fp);
+      write_key(&layout[(int)argv[i][j]].keys[lay], fp);
     }
 
-    if (i < argc - 2)
-      write_key(layout[' '].keys[lay].modifier,
-                layout[' '].keys[lay].keytowrite, fp); // white space
+    if (i < argc - 1) // insert white space between words
+      write_key(&layout[(int)' '].keys[lay], fp);
   }
 
-  release_keys(fp);
   fclose(fp);
   return 0;
 }

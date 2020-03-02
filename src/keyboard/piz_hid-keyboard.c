@@ -43,13 +43,25 @@ int main(int argc, char *argv[]) {
     exit(1);
   }
 
-  int i, j; // for loop indexes
-  short unsigned int lay = atoi(argv[1]);
+  // open device
   FILE *fp;
-  fp = fopen("/dev/hidg0", "w");
+  if ((fp = fopen("/dev/hidg0", "w")) == NULL) {
+    fputs("Couldn't open /dev/hidg0 device\n", stderr);
+    exit(1);
+  }
 
-  for (i = 2; i < argc; i++) {
-    for (j = 0; j < strlen(argv[i]); j++) {
+  char last_char;
+  short unsigned int lay = atoi(argv[1]);
+
+  for (int i = 2; i < argc; ++i) {
+    last_char = argv[i][0];
+    for (int j = 0; j < strlen(argv[i]); ++j) {
+      /* check if key releasing is needed */
+      if (argv[i][j] == last_char)
+        release_keys(fp);
+      else
+        last_char = argv[i][j];
+
       write_key(layout[argv[i][j]].keys[lay].modifier,
                 layout[argv[i][j]].keys[lay].keytowrite, fp);
       if (layout[argv[i][j]].keys[lay].is_dead)

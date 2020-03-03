@@ -41,8 +41,10 @@ write_key(struct Key* key, FILE* fp)
   /* press key */
   INSERT_KEY(fp, key->modifier, key->chr);
   /* dead keys need to be pressed twice */
-  if (key->is_dead)
+  if (key->is_dead) {
+    release_keys(fp);
     INSERT_KEY(fp, key->modifier, key->chr);
+  }
   /* release key */
   release_keys(fp);
 }

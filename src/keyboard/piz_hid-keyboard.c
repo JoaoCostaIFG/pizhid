@@ -8,32 +8,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
 
 #include "keys.h"
 
-#define _XOPEN_SOURCE 700
-#define MILISEC       1000
-#define NANOSEC       1000000
+#define START_I 2
 
 #define INSERT_KEY(dev, mod, chr) \
   fprintf(dev, "%c%c%c%c%c%c%c%c", mod, '\0', chr, '\0', '\0', '\0', '\0', '\0')
-
-void
-sleep_ms(int milliseconds)
-{
-  /* pause execution for milliseconds ms */
-  struct timespec ts;
-  ts.tv_sec  = milliseconds / MILISEC;
-  ts.tv_nsec = (milliseconds % MILISEC) * NANOSEC;
-  nanosleep(&ts, NULL);
-}
-
-void
-release_keys(FILE* fp)
-{
-  INSERT_KEY(fp, '\0', '\0');
-}
+#define RELEASE_KEYS(dev) INSERT_KEY(fp, '\0', '\0')
 
 void
 write_key(struct Key* key, FILE* fp)
@@ -42,11 +24,11 @@ write_key(struct Key* key, FILE* fp)
   INSERT_KEY(fp, key->modifier, key->chr);
   /* dead keys need to be pressed twice */
   if (key->is_dead) {
-    release_keys(fp);
+    RELEASE_KEYS(fp);
     INSERT_KEY(fp, key->modifier, key->chr);
   }
   /* release key */
-  release_keys(fp);
+  RELEASE_KEYS(fp);
 }
 
 int
@@ -66,7 +48,7 @@ main(int argc, char* argv[])
     exit(1);
   }
 
-  for (int i = 2; i < argc; ++i) {
+  for (int i = START_I; i < argc; ++i) {
     for (int j = 0; j < strlen(argv[i]); ++j) {
       write_key(&layout[(int)argv[i][j]].keys[lay], fp);
     }
@@ -76,5 +58,5 @@ main(int argc, char* argv[])
   }
 
   fclose(fp);
-  return 0;
+  return EXIT_SUCCESS;
 }

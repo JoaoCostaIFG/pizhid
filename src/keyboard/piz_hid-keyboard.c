@@ -5,6 +5,7 @@
  * device (with USB OTG)
  */
 
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -55,6 +56,10 @@ main(int argc, char* argv[])
   // print usage
   if (argc < 3) {
     fputs("Usage: piz_hid-keyboard <layout> <text>\n", stderr);
+    exit(1);
+  }
+  if (!isdigit(argv[1][0])) {
+    fputs("Layout must be a digit\n", stderr);
     exit(1);
   }
   int lay = atoi(argv[1]); // get layout number

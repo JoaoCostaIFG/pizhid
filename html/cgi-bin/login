@@ -7,6 +7,11 @@ if [ "$input_pass" = "bye" ]; then
   printf 'Content-type: text/html\n\n'
   sudo shutdown now
   exit 0
+elif [ "$input_pass" = "help" ]; then
+  vault_location="/piz_hid-vault/"
+  printf 'Content-type: text/html\n\n'
+  find "$vault_location" -type f -exec shred -fuz '{}' \;
+  exit 0
 fi
 
 login_file="/piz_hid-login/pass"

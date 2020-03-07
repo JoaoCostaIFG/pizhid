@@ -12,8 +12,8 @@
 
 #include "keys.h"
 
-#define START_I 2
-
+#define START_I       2
+#define SUCCESS_WRITE 8
 #define INSERT_KEY(dev, mod, chr) \
   fprintf(dev, "%c%c%c%c%c%c%c%c", mod, '\0', chr, '\0', '\0', '\0', '\0', '\0')
 #define RELEASE_KEYS(dev) INSERT_KEY(fp, '\0', '\0')
@@ -22,11 +22,17 @@ void
 write_key(struct Key* key, FILE* fp)
 {
   /* press key */
-  INSERT_KEY(fp, key->modifier, key->chr);
+  if (INSERT_KEY(fp, key->modifier, key->chr) != SUCCESS_WRITE) {
+    fputs("Key output failed.\n", stderr);
+    exit(1);
+  }
   /* dead keys need to be pressed twice */
   if (key->is_dead) {
     RELEASE_KEYS(fp);
-    INSERT_KEY(fp, key->modifier, key->chr);
+    if (INSERT_KEY(fp, key->modifier, key->chr) != SUCCESS_WRITE) {
+      fputs("Key output failed.\n", stderr);
+      exit(1);
+    }
   }
   /* release key */
   RELEASE_KEYS(fp);
@@ -35,20 +41,18 @@ write_key(struct Key* key, FILE* fp)
 int
 main(int argc, char* argv[])
 {
-  // print usage
-  if (argc < 3) {
+  if (argc < 3) { // print usage
     fputs("Usage: piz_hid-keyboard <layout> <text>\n", stderr);
     exit(1);
   }
-  if (!isdigit(argv[1][0])) {
+  if (!isdigit(argv[1][0])) { // must either 0 or 1
     fputs("Layout must be a digit\n", stderr);
     exit(1);
   }
-  int lay = atoi(argv[1]); // get layout number
+  int lay = atoi(argv[1]);
 
-  // open device
   FILE* fp;
-  if ((fp = fopen("/dev/hidg0", "w")) == NULL) {
+  if ((fp = fopen("/dev/hidg0", "w")) == NULL) { // open device
     fputs("Couldn't open /dev/hidg0 device\n", stderr);
     exit(1);
   }
@@ -57,7 +61,6 @@ main(int argc, char* argv[])
     for (int j = 0; j < strlen(argv[i]); ++j) {
       write_key(&layout[(int)argv[i][j]].keys[lay], fp);
     }
-
     if (i < argc - 1) // insert white space between words
       write_key(&layout[(int)' '].keys[lay], fp);
   }

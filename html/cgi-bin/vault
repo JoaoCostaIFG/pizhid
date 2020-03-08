@@ -1,21 +1,19 @@
 #!/bin/sh
 
+printf "Content-type: text/html\n\n"
 
 entry_sel="$(less <&0)"
-vault_location="/piz_hid-vault/"
 
 if [ ! "$entry_sel" ]; then
-        entry_sel="$(sudo -u piz_hid find "$vault_location" -type f |
-		grep -vF ".gpg-id" |
-		awk -F '/' '{printf("%s", $3); for (i=4; i<=NF; i++) {printf("/%s", $i)}; printf("\n")}')"
-
-        printf "Content-type: text/html\n\n%s" "$entry_sel"
-
+  entry_sel="$(find "$PZ_VAULT_DIR" -type f ! -name ".gpg-id" |
+    sed -e "s|^$PZ_VAULT_DIR||")"
+  printf "%s" "$entry_sel"
 else
-	login="$(less /piz_hid-login/pass)"
-	entry="$(sudo -u piz_hid /usr/bin/gpg -d --batch --pinentry-mode loopback --passphrase "$login" "$vault_location/$entry_sel" | head -n 2)"
+  entry="$(sudo -u piz_hid /usr/bin/gpg -d --batch --pinentry-mode loopback --passphrase "$(cat /piz_hid-login/pass)" "$PZ_VAULT_DIR/$entry_sel" |
+    head -n 2)"
 
-	printf "Content-type: text/html\n\n%s" "$(printf "%s" "$entry" | head -n 2 | tail -n 1)"
-        sudo piz_hid-keyboard 1 "$(printf "%s" "$entry" | head -n 1)"
-
+  # username for clipboarding
+  printf "%s" "$(printf "%s" "$entry" | head -n 2 | tail -n 1)"
+  # type password out
+  sudo piz_hid-keyboard 1 "$(printf "%s" "$entry" | head -n 1)"
 fi

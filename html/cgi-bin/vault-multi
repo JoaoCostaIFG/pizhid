@@ -1,9 +1,7 @@
 #!/bin/sh
 
+entry_sel="$(cat <&0)"
 
-entry_sel="$(less <&0)"
-vault_location="/piz_hid-vault/"
-
-login="$(less /piz_hid-login/pass)"
-entry="$(sudo -u piz_hid /usr/bin/gpg -d --batch --pinentry-mode loopback --passphrase "$login" "$vault_location/$entry_sel" | tail -n +2)"
+entry="$(sudo -u piz_hid /usr/bin/gpg -d --batch --pinentry-mode loopback --passphrase "$(cat /piz_hid-login/pass)" "$PZ_VAULT_DIR/$entry_sel" |
+  tail -n +2)"
 printf "Content-type: text/html\n\n%s" "$entry"

@@ -1,4 +1,4 @@
 #!/bin/sh
-login_file="/piz_hid-login/pass"
-rm "$login_file"
-printf 'Content-type: text/html\n\n'
+
+printf "Content-type: text/html\n\n"
+rm "$PZ_LOGIN_FILE"

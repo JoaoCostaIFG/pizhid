@@ -1,34 +1,25 @@
 #!/bin/sh
 
+printf "Content-type: text/html\n\n"
+
 input_pass="$(htmlpost2str "$(cat <&0)")"
 
-# Locked shutdown
-if [ "$input_pass" = "bye" ]; then
-  printf 'Content-type: text/html\n\n'
+if [ "$input_pass" = "bye" ]; then # Locked shutdown
   sudo shutdown now
-  exit 0
-elif [ "$input_pass" = "help" ]; then
-  vault_location="/piz_hid-vault/"
-  printf 'Content-type: text/html\n\n'
-  find "$vault_location" -type f -exec shred -fuz '{}' \;
-  exit 0
-fi
-
-login_file="/piz_hid-login/pass"
-if [ "$input_pass" ]; then
+elif [ "$input_pass" = "help" ]; then # Delete vault contents
+  find "$PZ_VAULT_DIR" -type f -exec shred -fuz '{}' \;
+elif [ "$input_pass" ]; then
   hash="$(head -1 /etc/piz_hid-creds)"
   salt="$(head -2 /etc/piz_hid-creds | tail -1)"
   iter="$(tail -1 /etc/piz_hid-creds)"
   if [ "$(piz_hid-hash "$input_pass" "$salt" "$iter")" = "$hash" ]; then
     (
       umask 077
-      printf "%s" "$input_pass" >"$login_file"
+      printf "%s" "$input_pass" >"$PZ_LOGIN_FILE"
     )
   fi
 fi
 
-if [ -f "$login_file" ]; then
-  printf 'Content-type: text/html\n\nauthenticated'
-else
-  printf 'Content-type: text/html\n\n'
+if [ -f "$PZ_LOGIN_FILE" ]; then
+  printf "authenticated"
 fi

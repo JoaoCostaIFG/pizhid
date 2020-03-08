@@ -1,3 +1,3 @@
+PZ_CREDS_FILE="/etc/piz_hid-creds"
 PZ_LOGIN_FILE="/piz_hid-login/pass"
 PZ_VAULT_DIR="/piz_hid-vault/"
-PZ_CREDS_FILE="/etc/piz_hid-creds"

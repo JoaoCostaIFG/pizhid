@@ -1,8 +1,7 @@
 #!/bin/sh
 
 entry_sel="$(cat <&0)"
-vault_location="/piz_hid-vault/"
 
-entry="$(sudo -u piz_hid /usr/bin/gpg -d --batch --pinentry-mode loopback --passphrase "$(cat /piz_hid-login/pass)" "$PZ_VAULT_DIR/$entry_sel" |
+entry="$(sudo -u piz_hid gpg -d --batch --pinentry-mode loopback --passphrase "$(cat "$PZ_LOGIN_FILE")" "$PZ_VAULT_DIR/$entry_sel" |
   head -n 1)"
 printf "Content-type: text/html\n\n%s" "$entry"

@@ -9,7 +9,7 @@ if [ ! "$entry_sel" ]; then
     sed -e "s|^$PZ_VAULT_DIR||")"
   printf "%s" "$entry_sel"
 else
-  entry="$(sudo -u piz_hid /usr/bin/gpg -d --batch --pinentry-mode loopback --passphrase "$(cat /piz_hid-login/pass)" "$PZ_VAULT_DIR/$entry_sel" |
+  entry="$(sudo -u piz_hid gpg -d --batch --pinentry-mode loopback --passphrase "$(cat "$PZ_LOGIN_FILE")" "$PZ_VAULT_DIR/$entry_sel" |
     head -n 2)"
 
   # username for clipboarding

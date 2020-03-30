@@ -2,6 +2,6 @@
 
 entry_sel="$(cat <&0)"
 
-entry="$(sudo -u piz_hid gpg -d --batch --pinentry-mode loopback --passphrase "$(cat "$PZ_LOGIN_FILE")" "$PZ_VAULT_DIR/$entry_sel" |
-  tail -n +2)"
+entry="$(sudo -u piz_hid gpg -d --batch --pinentry-mode loopback \
+  --passphrase "$(cat "$PZ_LOGIN_FILE")" "$PZ_VAULT_DIR/$entry_sel" | sed 1d)"
 printf "Content-type: text/html\n\n%s" "$entry"

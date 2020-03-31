@@ -4,7 +4,10 @@ printf "Content-type: text/html\n\n"
 
 input_pass="$(htmlpost2str "$(cat <&0)")"
 
-[ -z "$input_pass" ] && [ -f "$PZ_LOGIN_FILE" ] && printf "authenticated" && exit
+if [ -z "$input_pass" ]; then
+  [ -f "$PZ_LOGIN_FILE" ] && printf "authenticated"
+  exit
+fi
 
 case "$input_pass" in
 "bye")

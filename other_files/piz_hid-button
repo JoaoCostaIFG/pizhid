@@ -4,27 +4,30 @@ import RPi.GPIO as GPIO
 from subprocess import call
 from time import sleep
 
+
+def shutdown(channel):
+    call(["piz_hid-blink"])
+    call(["sudo", "shutdown", "now"])
+
+
+def wlanToggle(channel):
+    call(["toggle_wlan"])
+    call(["piz_hid-blink"])
+
+
 # constants
-input_pin = 21
 bounce_time = 300
-sleep_t = 3600
-out_txt = "<sample_text>"
 
-
-# write pass in pass
-def my_callback(channel):
-    call(["piz_hid-keyboard", "1", out_txt])
-
-
-# Don't use physical pin numbering
+# don't use physical pin numbering
 GPIO.setmode(GPIO.BCM)
-# Set pin as input, initially on
-GPIO.setup(input_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-GPIO.add_event_detect(
-    input_pin, GPIO.RISING, callback=my_callback, bouncetime=bounce_time
-)
+# shutdown button
+GPIO.setup(3, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.add_event_detect(3, GPIO.RISING, callback=shutdown, bouncetime=bounce_time)
+# other button
+GPIO.setup(21, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.add_event_detect(21, GPIO.RISING, callback=wlanToggle, bouncetime=bounce_time)
 
 while True:
-    sleep(sleep_t)
+    sleep(3600)
 
 GPIO.cleanup()  # Clean up

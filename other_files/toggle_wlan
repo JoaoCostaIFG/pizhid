@@ -1,0 +1,7 @@
+#!/bin/sh
+
+if [ "$(rfkill list wlan -n -o SOFT)" = "unblocked" ]; then
+  rfkill block wlan
+else
+  rfkill unblock wlan
+fi

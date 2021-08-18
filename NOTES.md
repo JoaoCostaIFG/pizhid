@@ -34,7 +34,7 @@ TimeoutStartSec=1
 1. Soft unlock wifi
 
 ```sh
-sudo rfkill unlock wifi
+sudo rfkill unblock wifi
 ```
 
 2. config network at: /etc/wpa_supplicant/wpa_supplicant.conf  

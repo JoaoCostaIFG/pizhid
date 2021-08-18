@@ -1,0 +1,5 @@
+auto usb1
+allow-hotplug usb1
+iface usb1 inet static
+        address 10.77.78.77
+        netmask 255.255.255.0

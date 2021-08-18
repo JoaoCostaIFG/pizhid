@@ -7,7 +7,7 @@ DefaultDependencies=true
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/piz_hid/piz_hid-usbgadget
+ExecStart=/usr/bin/pizhid-usbgadget
 
 [Install]
 WantedBy=local-fs.target

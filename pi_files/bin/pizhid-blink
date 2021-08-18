@@ -1,14 +1,14 @@
 #!/bin/sh
 
-led0_dir="/sys/class/leds/led0"
+cd "/sys/class/leds/led0" || exit 1
 # Set the Pi Zero ACT LED trigger to 'none' (we control it).
-printf "none" >"$led0_dir/trigger"
+printf "none" >"trigger"
 
 blink() {
   # Blink the ACT LED (1 - off, 0 - on)
-  printf 1 >"$led0_dir/brightness"
+  printf 1 >"brightness"
   sleep 0.2
-  printf 0 >"$led0_dir/brightness"
+  printf 0 >"brightness"
 }
 
 blink

@@ -1,8 +1,8 @@
 #!/bin/sh
 
-CURL="curl --connect-timeout 5 -k"
+CURL="curl --connect-timeout 5"
 DMENU="dmenu -i -l 5"
-remote="https://192.168.7.2"
+remote="http://10.77.77.77"
 
 login_cmd="$CURL $remote/cgi/login"
 

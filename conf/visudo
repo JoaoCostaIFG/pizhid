@@ -1,6 +1,0 @@
-# Add to the file
-# My permissions
-www-data ALL=NOPASSWD: /usr/bin/piz_hid-keyboard
-www-data ALL=NOPASSWD: /sbin/shutdown
-www-data ALL=(piz_hid) NOPASSWD: /usr/bin/gpg
-www-data ALL=(piz_hid) NOPASSWD: /usr/bin/find /piz_hid-vault/ -type f

@@ -12,15 +12,13 @@
 
 #include "keys.h"
 
-#define START_I       2
+#define START_I 2
 #define SUCCESS_WRITE 8
-#define INSERT_KEY(dev, mod, chr) \
+#define INSERT_KEY(dev, mod, chr)                                              \
   fprintf(dev, "%c%c%c%c%c%c%c%c", mod, '\0', chr, '\0', '\0', '\0', '\0', '\0')
 #define RELEASE_KEYS(dev) INSERT_KEY(fp, '\0', '\0')
 
-void
-write_key(struct Key* key, FILE* fp)
-{
+void write_key(struct Key *key, FILE *fp) {
   /* press key */
   if (INSERT_KEY(fp, key->modifier, key->chr) != SUCCESS_WRITE) {
     fputs("Key output failed.\n", stderr);
@@ -38,11 +36,9 @@ write_key(struct Key* key, FILE* fp)
   RELEASE_KEYS(fp);
 }
 
-int
-main(int argc, char* argv[])
-{
-  if (argc < 3) { // print usage
-    fputs("Usage: piz_hid-keyboard <layout> <text>\n", stderr);
+int main(int argc, char *argv[]) {
+  if (argc != 2) { // print usage
+    fputs("Usage: piz_hid-keyboard <layout>\n", stderr);
     exit(1);
   }
   if (!isdigit(argv[1][0])) { // must either 0 or 1
@@ -51,18 +47,15 @@ main(int argc, char* argv[])
   }
   int lay = atoi(argv[1]);
 
-  FILE* fp;
+  FILE *fp;
   if ((fp = fopen("/dev/hidg0", "w")) == NULL) { // open device
     fputs("Couldn't open /dev/hidg0 device\n", stderr);
     exit(1);
   }
 
-  for (int i = START_I; i < argc; ++i) {
-    for (int j = 0; j < strlen(argv[i]); ++j) {
-      write_key(&layout[(int)argv[i][j]].keys[lay], fp);
-    }
-    if (i < argc - 1) // insert white space between words
-      write_key(&layout[(int)' '].keys[lay], fp);
+  int c;
+  while ((c = getc(stdin)) != EOF) {
+    write_key(&layout[c].keys[lay], fp);
   }
 
   fclose(fp);

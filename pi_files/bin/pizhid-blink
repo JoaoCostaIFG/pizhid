@@ -16,4 +16,4 @@ sleep 0.1
 blink
 
 # Restore trigger
-#echo "mmc0" > "$led0_dir/trigger"
+echo "mmc0" >"trigger"

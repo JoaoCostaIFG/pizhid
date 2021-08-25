@@ -4,7 +4,7 @@ DefaultDependencies=true
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/piz_hid/piz_hid-button
+ExecStart=/usr/bin/pizhid-button
 
 [Install]
 WantedBy=local-fs.target

@@ -4,10 +4,12 @@
 [Unit]
 Description=PIZ_HID usb gadget service
 DefaultDependencies=true
+Before=network-pre.target
+Wants=network-pre.target
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/pizhid-usbgadget
+ExecStart=/usr/bin/pizhid-gadget-init
 
 [Install]
 WantedBy=local-fs.target

@@ -6,13 +6,13 @@ from time import sleep
 
 
 def shutdown(channel):
-    call(["piz_hid-blink"])
+    call(["pizhid-blink"])
     call(["sudo", "shutdown", "now"])
 
 
 def wlanToggle(channel):
     call(["toggle_wlan"])
-    call(["piz_hid-blink"])
+    call(["pizhid-blink"])
 
 
 # constants

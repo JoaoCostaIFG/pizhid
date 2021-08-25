@@ -1,1 +1,0 @@
-tmpfs       /piz_hid-login tmpfs   nodev,nosuid,noexec,nodiratime,size=1M   0 0

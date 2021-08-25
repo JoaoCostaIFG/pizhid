@@ -8,12 +8,7 @@
 
 <body>
   <h1><a href="/">PizHid</a></h1>
-  <?php
-  require_once 'pass.php';
-
-  if (isAuth()) {
-    echo 'Logout';
-  } else {
-    echo 'Login';
-  }
-  ?>
+  <?php require_once 'pass.php';
+  if (isAuth()) { ?>
+    <a href="/actions/logout.php">Logout</a>
+  <?php } ?>

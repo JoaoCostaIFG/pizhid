@@ -33,7 +33,8 @@ function getVaultEntry($entry)
   return $ret;
 }
 
-function login($password) {
+function login($password)
+{
   global $authfile;
 
   if (password_verify($password, 'hash')) {
@@ -45,6 +46,12 @@ function login($password) {
   } else {
     return false;
   }
+}
+
+function logout()
+{
+  global $authfile;
+  unlink($authfile);
 }
 
 function isAuth()

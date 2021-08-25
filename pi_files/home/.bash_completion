@@ -1,0 +1,13 @@
+_pass_completions() {
+  current_word="${COMP_WORDS[$COMP_CWORD]}"
+
+  entries="$(find $PASSWORD_STORE_DIR -type f ! -path "$PASSWORD_STORE_DIR/.gpg-id" -printf '%P\n' | cut -f 1 -d '.')"
+
+  if [ "$COMP_CWORD" -eq 1 ]; then
+    COMPREPLY=($(compgen -W "${entries} init ls grep find show insert edit find show insert edit generate rm mv cp" "$current_word"))
+  else
+    COMPREPLY=($(compgen -W "$entries" "$current_word"))
+  fi
+}
+
+complete -F _pass_completions pass

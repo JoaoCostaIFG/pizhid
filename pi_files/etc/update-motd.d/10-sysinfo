@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# get the load averages
+read one five fifteen rest < /proc/loadavg
+
+date +"%A, %e %B %Y, %r"
+uname -srmo
+
+echo
+
+echo "Uptime.............: $(uptime -p)"
+echo "Memory.............: $(cat /proc/meminfo | grep MemFree | awk {'print $2'})kB (Free) / $(cat /proc/meminfo | grep MemTotal | awk {'print $2'})kB (Total)"
+echo "Load averages......: ${one}, ${five}, ${fifteen} (1, 5, 15 min)"
+echo "Main processes.....: $(ps axch -o cmd:16,%cpu --sort=-%cpu | head -3 | awk '{ printf "%s(%s) ", $1, $2 }')"
+echo "IP addresses.......: $(ip a | grep global | awk '{printf "%s ", $2}')"

@@ -1,9 +1,9 @@
 <?php
 
+require_once '../includes/pass.php';
+
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-  if (!isset($_GET['entry']) || !isAuth()) {
-    die();
-  }
+  if (!isset($_GET['entry']) || !isAuth()) die();
   $info = getVaultEntry($_GET['entry']);
 
   if (isset($_GET['clip'])) {

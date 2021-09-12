@@ -9,6 +9,8 @@ $info = getVaultEntry($_GET['entry']);
 
 <br>
 <!-- pass -->
+<input type="text" value="<?= $info[0] ?>" id="pass-container" readonly="readonly">
+
 <script>
 function copypass() {
   // insert pass into clipboard
@@ -16,11 +18,13 @@ function copypass() {
   txtBox.focus();
   txtBox.select();
   let succ = document.execCommand('copy');
-  console.log(succ ? 'successful' : 'unsuccessful');
 } 
 </script>
-<input type="text" value="<?= $info[0] ?>" id="pass-container">
 <button onclick="copypass()">Copy pass</button>
+
+<script>
+
+</script>
 
 <pre><?php
 for ($i = 1; $i < count($info); $i++) {

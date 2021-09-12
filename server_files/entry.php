@@ -7,10 +7,12 @@ if (!isset($_GET['entry']) || !isAuth())
 $info = getVaultEntry($_GET['entry']);
 ?>
 
+<!-- pass container -->
 <br>
-<!-- pass -->
 <input type="text" value="<?= $info[0] ?>" id="pass-container" readonly="readonly">
+<br>
 
+<!-- copy pass -->
 <script>
 function copypass() {
   // insert pass into clipboard
@@ -23,8 +25,24 @@ function copypass() {
 <button onclick="copypass()">Copy pass</button>
 
 <script>
+let txtBox = document.getElementById("pass-container");
+// start hidden if there's JS
+txtBox.style.position = "absolute";
+txtBox.style.left = "-99999px";
 
+function togglepass() {
+  let txtBox = document.getElementById("pass-container");
+  let toggleBtn = document.getElementById("toggle-btn");
+  if (toggleBtn.innerHTML == "Unhide") {
+    toggleBtn.innerHTML = "Hide";
+    txtBox.style.position = "initial";
+  } else {
+    toggleBtn.innerHTML = "Unhide";
+    txtBox.style.position = "absolute";
+  }
+}
 </script>
+<button onclick="togglepass()" id="toggle-btn">Unhide</button>
 
 <pre><?php
 for ($i = 1; $i < count($info); $i++) {

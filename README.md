@@ -41,6 +41,14 @@ on/off, and the other toggles WiFi connectivity.
 systemctl disable dhcpcd.service
 ```
 
+- Swap is disabled for faster boot times and SD card preservation. There were no
+  benefits since the device memory usage is extremely low:
+
+```sh
+sudo dphys-swapfile swapoff
+sudo dphys-swapfile uninstall
+```
+
 - SSH login is only allowed in 1 specific user and it requires an SSH key-pair.
 - Some simple pass extensions are used.
 
@@ -71,3 +79,4 @@ systemctl disable dhcpcd.service
 ## License
 
 I don't know. I don't care. I'm not responsible for anything.
+```

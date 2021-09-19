@@ -9,7 +9,7 @@ $info = getVaultEntry($_GET['entry']);
 
 <!-- pass container -->
 <br>
-<input type="text" value="<?= $info[0] ?>" id="pass-container" readonly="readonly">
+<input type="text" value="<?= htmlspecialchars(trim($info[0]), ENT_COMPAT | ENT_HTML401, 'UTF-8') ?>" id="pass-container" readonly="readonly">
 <br>
 
 <!-- copy pass -->
@@ -46,7 +46,7 @@ function togglepass() {
 
 <pre><?php
 for ($i = 1; $i < count($info); $i++) {
-  echo $info[$i];
+  echo htmlspecialchars($info[$i], ENT_COMPAT | ENT_HTML401, 'UTF-8');
 }
 ?></pre>
 

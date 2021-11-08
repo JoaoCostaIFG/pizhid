@@ -24,7 +24,7 @@ function getVaultEntry($entry)
   if ($handle === false) return array();
 
   $ret = array();
-  while (($buffer = fgets($handle, 4096)) !== false) {
+  while (($buffer = fgets($handle)) !== false) {
     array_push($ret, $buffer);
   }
 

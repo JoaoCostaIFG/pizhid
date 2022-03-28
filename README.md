@@ -96,7 +96,3 @@ An entry in _fstab_ was added for `/tmp` to be a **tmpfs**.
 ## License
 
 I don't know. I don't care. I'm not responsible for anything.
-
-```
-
-```

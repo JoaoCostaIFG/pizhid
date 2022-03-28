@@ -32,7 +32,11 @@ provided by the USB-OTG capabilities of the device.
 There are 2 physical buttons present on the device. One powers the device
 on/off, and the other toggles WiFi connectivity.
 
-## Notes
+## Network
+
+The web server is available in 2 interfaces: `usb0` and `usb1`. IPs are
+automatically attributed to clients via a DHCP server (provided by
+[Dnsmasq](https://dnsmasq.org/)).
 
 - DHCPCD5 service was disabled in order to not interfere with dnsmasq. It is
   called from `/etc/networks/interfaces`:
@@ -40,6 +44,10 @@ on/off, and the other toggles WiFi connectivity.
 ```
 systemctl disable dhcpcd.service
 ```
+
+## SD card wear
+
+### Swap
 
 - Swap is disabled for faster boot times and SD card preservation. There were no
   benefits since the device memory usage is extremely low:
@@ -49,14 +57,21 @@ sudo dphys-swapfile swapoff
 sudo dphys-swapfile uninstall
 ```
 
-- SSH login is only allowed in 1 specific user and it requires an SSH key-pair.
-- Some simple pass extensions are used.
+### Log2Ram
+
+Logging to the sd card causes useless wear.
+[Log2Ram](https://github.com/azlux/log2ram) is used to reduce this wear.
+
+### /tmp is a tmpfs
+
+An entry in _fstab_ was added for `/tmp` to be a **tmpfs**.
 
 ## Thanks
 
 ### Important packages (providing core functionality)
 
-- dnsmasq - DHCP server.
+- [Log2Ram](https://github.com/azlux/log2ram) - `/var/log` in a **tmpfs**.
+- [Dnsmasq](https://dnsmasq.org/) - DHCP server.
 - Nginx - Web server.
 - PHP - Web app back-end.
 - PHP-fpm - Use PHP with Nginx.
@@ -66,6 +81,8 @@ sudo dphys-swapfile uninstall
 ### Cool websites and posts
 
 - [Weekend Project: Portable Pi Zero USB Gadget](https://back7.co/home/weekend-project-portable-pi-zero-usb-gadget)
+- [Composite USB Gadgets on the Raspberry Pi Zero](https://www.isticktoit.net/?p=1383)
+- [Arch wiki tmpfs](https://wiki.archlinux.org/title/Tmpfs)
 - [Arch wiki dnsmasq](https://wiki.archlinux.org/title/Dnsmasq)
 - [Libcomposite USB gadget example](https://github.com/ev3dev/ev3-systemd/blob/ev3dev-jessie/scripts/ev3-usb.sh)
 - [Post-Config of a RaspberryPi Zero W as an OTG-USB Gadget for off-device computing](https://jon.sprig.gs/blog/post/2243)
@@ -79,4 +96,7 @@ sudo dphys-swapfile uninstall
 ## License
 
 I don't know. I don't care. I'm not responsible for anything.
+
+```
+
 ```

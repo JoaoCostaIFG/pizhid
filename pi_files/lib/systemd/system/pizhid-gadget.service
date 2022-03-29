@@ -6,7 +6,7 @@ Wants=network-pre.target
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/pizhid-gadget-init
+ExecStart=/usr/local/bin/pizhid-gadget-init
 
 [Install]
 WantedBy=local-fs.target

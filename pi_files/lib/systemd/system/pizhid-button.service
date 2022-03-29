@@ -4,7 +4,7 @@ DefaultDependencies=true
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/pizhid-button
+ExecStart=/usr/local/bin/pizhid-button
 
 [Install]
 WantedBy=local-fs.target

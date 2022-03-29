@@ -77,8 +77,9 @@ sudo dphys-swapfile uninstall
 
 ### Log2Ram
 
-Logging to the sd card causes useless wear.
-[Log2Ram](https://github.com/azlux/log2ram) is used to reduce this wear.
+- Logging to the sd card causes useless wear;
+- [Log2Ram](https://github.com/azlux/log2ram) is used to reduce this wear;
+- Install:
 
 ```sh
 echo "deb [signed-by=/usr/share/keyrings/azlux-archive-keyring.gpg] http://packages.azlux.fr/debian/ bullseye main" | sudo tee /etc/apt/sources.list.d/azlux.list
@@ -87,6 +88,8 @@ sudo apt update
 sudo apt install log2ram
 ```
 
+- Copy the config file at `/etc/log2ram.conf`.
+
 ### /tmp is a tmpfs
 
 An entry in _fstab_ was added for `/tmp` to be a **tmpfs** (40MB).
@@ -94,6 +97,19 @@ An entry in _fstab_ was added for `/tmp` to be a **tmpfs** (40MB).
 ```sh
 echo "tmpfs  /tmp  tmpfs  rw,nodev,nosuid,size=40M  0  0" | sudo tee -a /etc/fstab
 ```
+
+## Web server
+
+- The server runs nginx and servers php pages (using php-fpm);
+- Install:
+
+```sh
+apt-get install nginx php8.0 php8.0-fpm pass
+systemctl enable --now php8.0-fpm
+```
+
+- Copy the nginx and php config files;
+- `pass` is needed for the password store.
 
 ## Thanks
 

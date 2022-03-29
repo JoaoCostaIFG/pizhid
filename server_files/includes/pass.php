@@ -4,7 +4,7 @@ $auth_file = '/tmp/pizhid.lock';
 
 function vaultList()
 {
-  $handle = popen("/bin/pizhid-pass nottree", "r");
+  $handle = popen("/usr/local/bin/pizhid-pass nottree", "r");
 
   if ($handle === false) return array();
 
@@ -20,7 +20,7 @@ function vaultList()
 function getVaultEntry($entry)
 {
   $e = escapeshellarg($entry);
-  $handle = popen('/bin/pizhid-pass ' . $e, "r");
+  $handle = popen('/usr/local/bin/pizhid-pass ' . $e, "r");
   if ($handle === false) return array();
 
   $ret = array();
@@ -34,7 +34,7 @@ function getVaultEntry($entry)
 
 function getKeyId()
 {
-  $id_handle = popen('/bin/pizhid-pass getkeyid', 'r') or die();
+  $id_handle = popen('/usr/local/bin/pizhid-pass getkeyid', 'r') or die();
   $id = trim(fgets($id_handle, 4096));
   pclose($id_handle);
   return $id;
@@ -42,7 +42,7 @@ function getKeyId()
 
 function getKeyGrip()
 {
-  $grip_handle = popen('/bin/pizhid-pass getkeygrip', 'r') or die();
+  $grip_handle = popen('/usr/local/bin/pizhid-pass getkeygrip', 'r') or die();
   $grip = trim(fgets($grip_handle, 4096));
   pclose($grip_handle);
   return $grip;
@@ -89,7 +89,9 @@ function checkPassword($password)
 function isAuth()
 {
   global $auth_file;
-  $owner = fileowner($auth_file);
-  if ($owner === posix_getpwnam(get_current_user())['uid']) return true;
-  else return false;
+  if (file_exists($auth_file)) {
+    $owner = fileowner($auth_file);
+    return ($owner === posix_getpwnam(get_current_user())['uid']);
+  }
+  return false;
 }

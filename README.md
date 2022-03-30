@@ -109,7 +109,7 @@ systemctl enable --now php8.0-fpm
 ```
 
 - Copy the nginx and php config files;
-- `pass` is needed for the password store.
+- `pass` is needed for the password store at `/home/pizhid/.password-store`.
 
 ## Thanks
 

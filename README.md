@@ -45,13 +45,7 @@ automatically attributed to clients via a DHCP server (provided by
   [blog post](https://jon.sprig.gs/blog/post/2243) and
   [script](https://github.com/JonTheNiceGuy/rpirouter/blob/994891e4fa0fd228b2bada7d7c275ac4464040b5/roles/jontheniceguy.rpirouter/templates/package_postinstall.sh.j2).
 
-```sh
-systemctl disable --now dnsmasq
-mv /etc/init.d/dnsmasq /etc/init.d/dnsmasq.initd
-sed /lib/systemd/system/dnsmasq.service -i -e "s/Requires=network.target/Requires=network.target sys-subsystem-net-devices-usb0.device{% if use_libComposite | default(true) | bool %} sys-subsystem-net-devices-usb1.device{% endif %}/" -e "s~/etc/init.d/dnsmasq ~/etc/init.d/dnsmasq.initd ~g"
-systemctl daemon-reload
-systemctl enable --now dnsmasq.service
-```
+[Dnsmasq](./scripts/dnsmasq.sh)
 
 ### Network details
 
@@ -70,10 +64,7 @@ systemctl enable --now dnsmasq.service
 - Swap is disabled for faster boot times and SD card preservation. There were no
   benefits since the device memory usage is extremely low:
 
-```sh
-sudo dphys-swapfile swapoff
-sudo dphys-swapfile uninstall
-```
+[Disable swap](./scripts/disable_swap.sh)
 
 ### Log2Ram
 
@@ -81,12 +72,7 @@ sudo dphys-swapfile uninstall
 - [Log2Ram](https://github.com/azlux/log2ram) is used to reduce this wear;
 - Install:
 
-```sh
-echo "deb [signed-by=/usr/share/keyrings/azlux-archive-keyring.gpg] http://packages.azlux.fr/debian/ bullseye main" | sudo tee /etc/apt/sources.list.d/azlux.list
-sudo wget -O /usr/share/keyrings/azlux-archive-keyring.gpg  https://azlux.fr/repo.gpg
-sudo apt update
-sudo apt install log2ram
-```
+[Install log2ram](./scripts/install_log2ram.sh)
 
 - Copy the config file at `/etc/log2ram.conf`.
 
@@ -94,19 +80,14 @@ sudo apt install log2ram
 
 An entry in _fstab_ was added for `/tmp` to be a **tmpfs** (40MB).
 
-```sh
-echo "tmpfs  /tmp  tmpfs  rw,nodev,nosuid,size=40M  0  0" | sudo tee -a /etc/fstab
-```
+[Tmp in tmpfs](./scripts/tmp_in_tmpfs.sh)
 
 ## Web server
 
 - The server runs nginx and servers php pages (using php-fpm);
 - Install:
 
-```sh
-apt-get install nginx php8.0 php8.0-fpm pass
-systemctl enable --now php8.0-fpm
-```
+[Web server](./scripts/web_server.sh)
 
 - Copy the nginx and php config files;
 - `pass` is needed for the password store at `/home/pizhid/.password-store`.

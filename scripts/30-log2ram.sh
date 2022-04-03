@@ -5,3 +5,7 @@ echo "deb [signed-by=/usr/share/keyrings/azlux-archive-keyring.gpg] http://packa
 sudo wget -O /usr/share/keyrings/azlux-archive-keyring.gpg  https://azlux.fr/repo.gpg
 sudo apt update
 sudo apt install log2ram
+
+# service
+sudo cp ~/pizhid_src/pi_files/etc/log2ram.conf /etc/log2ram.conf
+sudo systemctl enable log2ram

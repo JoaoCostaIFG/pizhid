@@ -3,5 +3,4 @@
 
 sudo cp ~/pizhid_src/pi_files/etc/motd /etc/motd
 
-sudo rm ~/pizhid_src/pi_files/etc/update-motd.d/*
-sudo cp -r ~/pizhid_src/pi_files/etc/update-motd.d/* /etc/update-motd.d/
+sudo rsync -r --delete ~/pizhid_src/pi_files/etc/update-motd.d/ /etc/update-motd.d/

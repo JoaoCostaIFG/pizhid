@@ -3,7 +3,7 @@
 
 # scripts
 chmod +x ~/pizhid_src/pi_files/usr/local/bin/*
-sudo cp ~/pizhid_src/pi_files/usr/local/bin/* /usr/local/bin/
+sudo rsync ~/pizhid_src/pi_files/usr/local/bin/ /usr/local/bin/
 
 # keyboard
 cd ~/pizhid_src/keyboard || exit 1

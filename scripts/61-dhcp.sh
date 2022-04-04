@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # install
-sudo apt-get install isc-dhcp-server
+sudo apt-get -y install isc-dhcp-server
 
 # config
 sudo cp ~/pizhid_src/pi_files/etc/dhcp/dhcpd.conf /etc/dhcp/dhcpd.conf

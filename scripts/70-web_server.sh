@@ -2,7 +2,7 @@
 ### Install and enable nginx, php-fpm, and pass to serve webapp.
 
 # install
-sudo apt-get install nginx php8.0 php8.0-fpm pass
+sudo apt-get -y install nginx php8.0 php8.0-fpm pass
 
 # config
 # nginx

@@ -1,5 +1,4 @@
 #!/bin/sh
-### Configs in /boot partition
+### Configs in /boot partition (cmdline.txt and config.txt).
 
-sudo cp ~/pizhid_src/pi_files/boot/cmdline.txt /boot/cmdline.txt
-sudo cp ~/pizhid_src/pi_files/boot/config.txt /boot/config.txt
+sudo rsync ~/pizhid_src/pi_files/boot/ /boot/

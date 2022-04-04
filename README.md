@@ -108,17 +108,20 @@ An entry in _fstab_ was added for `/tmp` to be a **tmpfs** (40MB).
 
 ### Cool websites and posts
 
-- [Weekend Project: Portable Pi Zero USB Gadget](https://back7.co/home/weekend-project-portable-pi-zero-usb-gadget)
 - [Composite USB Gadgets on the Raspberry Pi Zero](https://www.isticktoit.net/?p=1383)
 - [Arch wiki tmpfs](https://wiki.archlinux.org/title/Tmpfs)
-- [Libcomposite USB gadget example](https://github.com/ev3dev/ev3-systemd/blob/ev3dev-jessie/scripts/ev3-usb.sh)
-- [Post-Config of a RaspberryPi Zero W as an OTG-USB Gadget for off-device computing](https://jon.sprig.gs/blog/post/2243)
 - [Linux USB gadget configured through configfs](https://www.kernel.org/doc/Documentation/usb/gadget_configfs.txt)
 - [Dynamic MOTD on Debian/Ubuntu](https://ownyourbits.com/2017/04/05/customize-your-motd-login-message-in-debian-and-ubuntu/)
 - [Raspberry Pi Docs](https://www.raspberrypi.org/documentation/computers/configuration.html)
-- [Composite USB Gadgets on the Raspberry Pi Zero](https://www.isticktoit.net/?p=1383)
 - [Building a WiFi Enabled USB Rubber Ducky with a Raspberry Pi 0 w](https://www.aidanwoods.com/blog/building-a-wifi-enabled-usb-rubber-ducky/)
 - [gpg-preset-passphrase man](https://docs.oracle.com/cd/E36784_01/html/E36870/gpg-preset-passphrase-1.html)
+
+#### Best
+
+- [Extend The Lifespan of Your Raspberry Pi's SD Card with log2ram](https://ikarus.sg/extend-sd-card-lifespan-with-log2ram/)
+- [How to Squeeze 50% More Memory Out of Your Raspberry Pi with zram](https://ikarus.sg/using-zram-to-get-more-out-of-your-raspberry-pi/)
+- [Libcomposite USB gadget example](https://github.com/ev3dev/ev3-systemd/blob/ev3dev-jessie/scripts/ev3-usb.sh)
+- [Post-Config of a RaspberryPi Zero W as an OTG-USB Gadget for off-device computing](https://jon.sprig.gs/blog/post/2243)
 
 ## License
 

@@ -99,6 +99,7 @@ An entry in _fstab_ was added for `/tmp` to be a **tmpfs** (40MB).
 - [Log2Ram](https://github.com/azlux/log2ram) - `/var/log` in a **tmpfs**;
 - [Dnsmasq](https://dnsmasq.org/) - DHCP server.
   [Arch linux wiki entry](https://wiki.archlinux.org/title/Dnsmasq);
+- [Zram-swap config](https://github.com/StuartIanNaylor/zram-swap-config);
 - Nginx - Web server.
 - PHP - Web app back-end.
 - PHP-fpm - Use PHP with Nginx.

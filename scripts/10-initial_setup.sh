@@ -3,5 +3,3 @@
 
 sudo apt-get update
 sudo apt-get upgrade
-
-rsync -r . pizhid:/home/pizhid/pizhid_src/

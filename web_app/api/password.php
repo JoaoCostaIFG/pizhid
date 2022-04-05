@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     # print password raw
     echo $info[0];
   } else {
-    $handle = popen('/bin/sudo /usr/local/bin/pizhid-keyboard 1', "w") or die();
+    $handle = popen('/bin/sudo /usr/local/bin/pizhid-keyboard 0', "w") or die();
     fwrite($handle, $info[0]);
     pclose($handle);
     echo $info[1];

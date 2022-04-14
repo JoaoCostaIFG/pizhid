@@ -32,6 +32,16 @@ provided by the USB-OTG capabilities of the device.
 There are 2 physical buttons present on the device. One powers the device
 on/off, and the other toggles WiFi connectivity.
 
+## Initial setup
+
+- Set hostname to `pizhid`;
+- Enable SSH;
+- Enable SSH public-key authentication;
+- Change default user to `pizhid`
+- Enable network;
+- Set locale to `Europe/Lisbon`/`pt`;
+- *Skip first-run wizard*.
+
 ## Network
 
 The web server is available in 2 interfaces: `usb0` and `usb1`. IPs are

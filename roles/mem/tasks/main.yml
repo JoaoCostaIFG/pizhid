@@ -1,0 +1,35 @@
+---
+- name: /tmp in tmpfs
+  ansible.builtin.shell: echo "tmpfs  /tmp  tmpfs  rw,nodev,nosuid,size=40M  0  0" >>/etc/fstab
+- block:
+  - name: Add log2ram repository to sources
+    ansible.builtin.shell: echo "deb [signed-by=/usr/share/keyrings/azlux-archive-keyring.gpg] http://packages.azlux.fr/debian/ bullseye main" >/etc/apt/sources.list.d/azlux.list
+  - name: Add log2ram keyring
+    ansible.builtin.shell: wget -O /usr/share/keyrings/azlux-archive-keyring.gpg https://azlux.fr/repo.gpg
+  - name: Install log2ram
+    ansible.builtin.apt:
+      name: log2ram
+      state: present
+      update_cache: yes
+  - name: Config log2ram
+    copy:
+      src: log2ram.conf
+      dest: /etc/log2ram.conf
+  - name: Enable log2ram
+    systemd:
+      name: log2ram
+      enabled: true
+      masked: no
+- block:
+  - name: Clone zram-swap-config
+    ansible.builtin.git:
+      repo: "https://github.com/StuartIanNaylor/zram-swap-config"
+      dest: /usr/local/src/zram-swap-config
+    environment:
+      GIT_TERMINAL_PROMPT: 0 # reports "terminal prompts disabled" on missing password
+  - name: Install zram-swap-config
+    ansible.builtin.shell: chmod +x /usr/local/src/zram-swap-config/install.sh && /usr/local/src/zram-swap-config/install.sh
+  - name: Config zram-swap-config
+    copy:
+      src: zram-swap-config.conf
+      dest: /etc/zram-swap-config.conf

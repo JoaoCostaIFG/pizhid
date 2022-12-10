@@ -1,0 +1,9 @@
+---
+- name: MOTD
+  copy:
+    src: motd
+    dest: /etc/motd
+- name: MOTD update-motd directory
+  copy:
+    src: update-motd.d
+    dest: /etc/

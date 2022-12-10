@@ -1,0 +1,12 @@
+---
+- name: PizHid Ansible playbook
+  hosts: piz_hid
+  become: yes
+
+  roles:
+    #- common
+    #- motd
+    #- swap
+    #- mem
+    #- network
+    - bitwarden

@@ -1,0 +1,35 @@
+---
+- block:
+  - name: Install nginx
+    ansible.builtin.apt:
+      name:
+        - nginx
+      state: present
+  - name: Config nginx.conf
+    copy:
+      src: nginx.conf
+      dest: /etc/nginx/nginx.conf
+  - name: Config nginx default server
+    copy:
+      src: default
+      dest: /etc/nginx/sites-enabled/default
+  - name: Enable nginx service
+    systemd:
+      name: nginx
+      enabled: true
+      masked: no
+- block:
+  - name: Install docker
+    ansible.builtin.shell: curl -sSL https://get.docker.com | sh
+  - name: Add pizhid to Docker group
+    ansible.builtin.shell: usermod -aG docker USERNAME_HERE
+  - name: Get Vaultwarden docker image
+    ansible.builtin.shell: docker pull vaultwarden/server:latest
+  - name: Start Vaultwarden daemon
+    ansible.builtin.shell: docker run -d --name vaultwarden \
+      -e ADMIN_TOKEN=[ADMIN_TOKEN_HERE] \
+      --restart=always \
+      -v /bw-data/:/data/ \
+      -p 127.0.0.1:8080:80 \
+      -p 127.0.0.1:3012:3012 \
+      vaultwarden/server:latest

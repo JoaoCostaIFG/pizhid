@@ -1,0 +1,17 @@
+---
+- name: Install PizHid button script
+  copy:
+    src: pizhid-button
+    dest: /usr/local/bin/pizhid-button
+- name: Install PizHid button service
+  copy:
+    src: pizhid-button.service
+    dest: /etc/systemd/system/pizhid-button.service
+- name: Install PizHid gadger script
+  copy:
+    src: pizhid-gadget-init
+    dest: /usr/local/bin/pizhid-gadget-init
+- name: Install PizHid gadget service
+  copy:
+    src: pizhid-gadget.service
+    dest: /etc/systemd/system/pizhid-gadget.service

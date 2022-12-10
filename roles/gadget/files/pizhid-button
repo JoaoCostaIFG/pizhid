@@ -1,0 +1,56 @@
+#!/usr/bin/env python3
+
+from subprocess import call
+from time import time
+import signal
+import RPi.GPIO as GPIO
+
+
+def signal_handler(sig, frame):
+    GPIO.cleanup()  # Clean up
+
+
+class ButtonHandler:
+    def __init__(
+        self, pin: int, clickCmd: list, holdCmd: list, bouncetime: int = 300
+    ) -> None:
+        self.pin: int = pin
+        self.clickCmd: list = clickCmd
+        self.holdCmd: list = holdCmd
+        self.bouncetime: int = bouncetime
+        GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        self._setHandler()
+
+    def _setHandler(self) -> None:
+        GPIO.remove_event_detect(self.pin)
+        GPIO.add_event_detect(
+            self.pin, GPIO.FALLING, callback=self._handler, bouncetime=self.bouncetime
+        )
+
+    def _handler(self, pin) -> None:
+        GPIO.remove_event_detect(self.pin)
+        startTime = time()
+        GPIO.wait_for_edge(self.pin, GPIO.RISING)
+        timeTaken = time() - startTime
+
+        if 1.4 <= timeTaken:
+            # hold
+            call(self.holdCmd)
+        elif 0.2 <= timeTaken:
+            # click
+            call(self.clickCmd)
+
+        self._setHandler()
+
+
+# GPIO.setwarnings(False)
+GPIO.setmode(GPIO.BCM)
+shutdownBtn = ButtonHandler(3, ["shutdown", "now"], ["reboot", "now"])
+shutdownBtn = ButtonHandler(
+    21,
+    ["ip", "link", "set", "dev", "uap0", "down"],
+    ["ip", "link", "set", "dev", "uap0", "up"],
+)
+
+signal.signal(signal.SIGINT, signal_handler)
+signal.pause()

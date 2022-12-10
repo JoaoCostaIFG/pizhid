@@ -1,0 +1,31 @@
+---
+- name: Update packages and cache
+  ansible.builtin.apt:
+    update_cache: yes
+    upgrade: yes
+- name: Install base dependencies
+  ansible.builtin.apt:
+    name:
+      - neovim
+      - rsync
+    state: present
+- name: Boot cmdline
+  copy:
+    src: boot/cmdline.txt
+    dest: /boot/cmdline.txt
+- name: Boot config.txt
+  copy:
+    src: boot/config.txt
+    dest: /boot/config.txt
+- name: Bash aliases
+  copy:
+    src: bash_aliases
+    dest: /home/pizhid/.bash_aliases
+- name: Enable kernel modules
+  copy:
+    src: modules
+    dest: /etc/modules
+- name: Config SSHD
+  copy:
+    src: sshd_config
+    dest: /etc/ssh/sshd_config

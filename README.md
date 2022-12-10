@@ -40,7 +40,7 @@ on/off, and the other toggles WiFi connectivity.
 - Change default user to `pizhid`
 - Enable network;
 - Set locale to `Europe/Lisbon`/`pt`;
-- *Skip first-run wizard*.
+- _Skip first-run wizard_.
 
 ## Network
 
@@ -132,6 +132,10 @@ An entry in _fstab_ was added for `/tmp` to be a **tmpfs** (40MB).
 - [How to Squeeze 50% More Memory Out of Your Raspberry Pi with zram](https://ikarus.sg/using-zram-to-get-more-out-of-your-raspberry-pi/)
 - [Libcomposite USB gadget example](https://github.com/ev3dev/ev3-systemd/blob/ev3dev-jessie/scripts/ev3-usb.sh)
 - [Post-Config of a RaspberryPi Zero W as an OTG-USB Gadget for off-device computing](https://jon.sprig.gs/blog/post/2243)
+- [RasAP Docs AP-STA mode](https://docs.raspap.com/ap-sta/)
+- [Creating Wireless Router using Raspberry Pi Zero W](https://scribles.net/creating-wireless-router-using-raspberry-pi-zero-w/)
+- [Hostapd config file](https://w1.fi/cgit/hostap/plain/hostapd/hostapd.conf)
+- [BYOPM – Bring Your Own Password Manager](https://novamostra.com/2022/10/23/byopm/)
 
 ## License
 

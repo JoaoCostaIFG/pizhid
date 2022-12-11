@@ -9,4 +9,5 @@
     #- swap
     #- mem
     #- network
-    - bitwarden
+    #- bitwarden
+    - gadget

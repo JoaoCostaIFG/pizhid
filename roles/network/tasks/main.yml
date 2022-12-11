@@ -3,6 +3,7 @@
   ansible.builtin.apt:
     name:
       - isc-dhcp-server
+      - isc-dhcp-common
       - dhcpcd5
       - hostapd
       - iptables

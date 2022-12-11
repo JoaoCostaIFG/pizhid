@@ -115,7 +115,7 @@ ls "/sys/class/udc" >"UDC"
 
 # access point device
 iw dev wlan0 interface add uap0 type __ap
-ip link set dev uap0 down
+ip link set dev uap0 up
 ## forwarding
 iptables -t nat -A POSTROUTING -o wlan0 -j MASQUERADE
 iptables -A FORWARD -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
